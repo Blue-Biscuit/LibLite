@@ -133,6 +133,7 @@ class Library:
 class UIMenu(enum.Enum):
     ProgramInfoPrint = 1
     MainMenu = 2
+    LibraryPrint = 3
     
 
 class UserInterface:
@@ -142,8 +143,12 @@ class UserInterface:
     def __init__(self, library: Library):
         self.library = library
 
-    def run():
-        pass
+    def run(self):
+        self.runProgramInfo()
+        mmr = self.runMainMenu()
+
+        if mmr == UIMenu.LibraryPrint:
+            self.runPrintLibrary
 
     def _menuPrompt(items: list[tuple[str, UIMenu]]) -> UIMenu:
         numItems = len(items)
@@ -151,7 +156,7 @@ class UserInterface:
             raise ValueError('There must be at least one menu item.')
         
         for i in range(0, numItems):
-            print(i + ':\t\t' + items[i][0])
+            print(str(i + 1) + ':\t\t' + items[i][0])
         print()
 
         choice = numberChoicePrompt(numItems)
@@ -162,9 +167,12 @@ class UserInterface:
         print('Version ' + self.version + ', updated on ' + self.lastUpdateDate)
         print()
 
-    def runMainMenu(self):
+    def runMainMenu(self) -> UIMenu:
         print('Library @ ' + self.library.path)
-        UserInterface._menuPrompt()
+        return UserInterface._menuPrompt([('Print Library', UIMenu.LibraryPrint)])
+
+    def runPrintLibrary(self):
+        print(self.library)
         
 
 
